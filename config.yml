@@ -1,0 +1,2 @@
+defaultHost: localhost
+logDirectory: /var/log/

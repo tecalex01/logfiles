@@ -1,0 +1,166 @@
+swagger: '2.0'
+
+info:
+  description: This is the swagger spec for log file REST API
+  version: "1.0.0"
+  title: Log file REST API
+  contact:
+    email: alexisdct@gmail.com
+
+host: localhost
+basePath: /logfiles/api/v1
+schemes:
+ - https
+ 
+tags:
+  - name: developers
+    description: Operations available to regular developers
+    
+paths:
+  /files:
+    get:
+      tags:
+        - developers
+      summary: Search for all log files in default log directory in one or several hosts.
+      operationId: searchAllLogFiles
+      description: |
+        Search all the log files in default directory in the request host and other hosts
+        specified in hosts header parameter.
+      parameters:
+        - in: header
+          name: X-hosts
+          description: Optional parameter to specify other hosts on where the log files will be looked.
+          required: false
+          type: string
+          
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Log files found for all or some hosts.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/LogFile'
+        400:
+          $ref: '#/responses/400'
+        403:
+          $ref: '#/responses/403'
+        404:
+          $ref: '#/responses/404'
+        500:
+          $ref: '#/responses/500'
+        
+  /files/{filename}:
+    get:
+      tags:
+        - developers
+      summary: Search for a specific file in default log directory in one or several hosts.
+      operationId: searchLogFile
+      description: |
+        Search for specific file in default log directory in the request host and other host
+        specified in header host parameter.
+      parameters:
+        - in: path
+          name: filename
+          description: Required parameter to specify the log file name that is been looked.
+          required: true
+          type: string
+        - in: query
+          name: lastnevents
+          description: Optional parameter to specifiy the number of last events on log file to be returned.
+          required: false
+          type: integer
+          minimum: 1
+        - in: query
+          name: keyword
+          description: Optional parameter to specify a keyword to filter log file lines.
+          required: false
+          type: string
+        - in: header
+          name: hosts
+          description: Optional parameter to specify other hosts where specific file will be looked.
+          required: false
+          type: string
+          
+      produces:
+        - application/json
+        
+      responses:
+        200:
+          description: file found
+          schema:
+            $ref: '#/definitions/LogFile'
+        400:
+          $ref: '#/responses/400'
+        403:
+          $ref: '#/responses/403'
+        404:
+          $ref: '#/responses/404'
+        500:
+          $ref: '#/responses/500'
+    
+          
+definitions:
+  LogFile:
+      type: object
+      required:
+        - host
+        - path
+        - size
+        - logfile_buffer
+      properties:
+        host:
+          type: string
+          example: 10.1.2.3
+        path:
+          type: string
+          example: /var/log/filename.log
+        size:
+          type: number
+          example: 20000
+        logfile_buffer:
+          $ref: '#/definitions/LogFileBuffer'
+          
+  LogFileBuffer:
+    type: object
+    required:
+      - lastReadPos
+    properties:
+      lastReadPos:
+        description: This is the reference to the latest position on where the latest line were read on the log file.
+        example: 20000
+      lines:
+        type: array
+        items:
+          type: string
+          example: 10:00:01 This is a line example
+          
+  ErrorType:
+    description: Type that contains error details for a REST call
+    type: object
+    properties:
+      errCode:
+        type: string
+        description: Machine recognizable code of the ocurred error
+      errMessage:
+        type: string
+        description: Human-readable description of the problem.
+
+responses:
+  400:
+    description: Bad request.
+    schema:
+      $ref: '#/definitions/ErrorType'
+  403:
+    description: Forbidden.
+    schema:
+      $ref: '#/definitions/ErrorType'
+  404:
+    description: Not found.
+    schema:
+      $ref: '#/definitions/ErrorType'
+  500:
+    description: Internal Server Error.
+    schema:
+      $ref: '#/definitions/ErrorType'
