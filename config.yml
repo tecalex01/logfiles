@@ -1,2 +1,5 @@
 defaultHost: localhost
-logDirectory: /var/log/
+logDirectory: C:/Users/alexdel/Documents/Personal/logfiles/
+startPos: -1
+nEvents: -1
+orderBy: 1

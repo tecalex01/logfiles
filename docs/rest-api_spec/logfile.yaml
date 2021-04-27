@@ -7,8 +7,10 @@ info:
   contact:
     email: alexisdct@gmail.com
 
-host: localhost
-basePath: /logfiles/api/v1
+# host: localhost
+# basePath: /logfiles/api/v1
+host: virtserver.swaggerhub.com
+basePath: /alexisdct/LogFile/1.0.0
 schemes:
  - https
  
@@ -17,7 +19,7 @@ tags:
     description: Operations available to regular developers
     
 paths:
-  /files:
+  /files/:
     get:
       tags:
         - developers
@@ -67,19 +69,33 @@ paths:
           required: true
           type: string
         - in: query
-          name: lastnevents
-          description: Optional parameter to specifiy the number of last events on log file to be returned.
+          name: start_pos
+          description: Optional parameter to specify the position on the file to start reading.
+          required: false
+          type: integer
+          minimum: 0
+        - in: query
+          name: n_lines
+          description: Optional parameter to specifiy the number of lines on log file to be returned. 
+            If parameter order_by not specified. Returns the first n lines on log file.
+            If parameter order_by specified. Returns the first n lines on log file if order_by = 1 else returns the last n lines on log file.
           required: false
           type: integer
           minimum: 1
         - in: query
           name: keyword
-          description: Optional parameter to specify a keyword to filter log file lines.
+          description: Optional parameter to specify a keyword to filter log file lines. If parameter specified, filter the n_lines selected with the keyword.
           required: false
           type: string
+        - in: query
+          name: order_by
+          description: Define how the log file is read. If order_by=1 then file read in ascendant way, else file read in descendant way.
+          required: false
+          type: integer
+          minimum: 1
         - in: header
-          name: hosts
-          description: Optional parameter to specify other hosts where specific file will be looked.
+          name: X-hosts
+          description: Optional parameter to specify other hosts where specific file will be looked. Every host needs to be specified by commas. For example hosts='col1234,den3920'
           required: false
           type: string
           
