@@ -7,13 +7,17 @@ Currently, it supports two entry points.
 2. http://domain/logfiles/apiv1/files
 
 In both entries it support following query and header params:
+```
  - n_lines={integer}  @QueryParam  : Number of lines to be read on a file
  - keyword={string}   @QueryParam  : Keyword to be looked in the filtering lines
  - order_by={0|1}     @QueryParam  : Ordering, 0 - Ascendant, 1 - Descendant
  - hosts={string}     @HeaderParam : List<Host> where the files (file) will be looked.
+```
  
 For http://domain/logfiles/api/v1/files/{filename} it supports one more query param that it only works in the main server.
+```
   - start_pos={long} : Specify on which file position the reading will start.
+```
   
 The parameters can be used alternative, all of them or some of them.
 
@@ -98,7 +102,6 @@ For both entries, the REST-API respond with a JSON which represent a host with f
  Return host resource with a list of LogFile which represents all the files in the log directory. Each Logfile contains a LogFileBuffer resource which contains a filtering lines with keyword on the #line previous selected of each file read in descendant order.
  
  There are any other combinations of parameters you can use then together in any way.
- 
  
 ##Tests (src/test)
  This code has some test. 
