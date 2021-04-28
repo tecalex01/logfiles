@@ -103,7 +103,7 @@ For both entries, the REST-API respond with a JSON which represent a host with f
  
  There are any other combinations of parameters you can use then together in any way.
  
-##Tests (src/test)
+## Tests (src/test)
  This code has some test. 
  java/com/logfile/backend/test/LogFileTest.java : Unit test for backend infrastructure
  javascript/LogFileResourceTest.js              : Javascript functional test to test REST-API.
