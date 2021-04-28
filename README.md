@@ -19,8 +19,7 @@ The parameters can be used alternative, all of them or some of them.
 
 For both entries, the REST-API respond with a JSON which represent a host with following information:
 
-<p>
-```json
+```yaml
  Host
  {
     host: string,                       /* Host name */
@@ -42,16 +41,15 @@ For both entries, the REST-API respond with a JSON which represent a host with f
  	lastPosRead: long,                  /* This helps to know which is the last byte read in the file */
  	lines: List<String>                 /* Lines read from the file */ 
  }
- ```
- </p>
- 
+```
+``` 
  This are the expected errors:
  200 - OK
  403 - Forbidden
  404 - Not found
  500 - Internal Server Error
  504 - Gateway Timeout
- 
+```
 
  
  Some examples:
@@ -102,18 +100,18 @@ For both entries, the REST-API respond with a JSON which represent a host with f
  There are any other combinations of parameters you can use then together in any way.
  
  
- Tests (src/test)
+##Tests (src/test)
  This code has some test. 
  java/com/logfile/backend/test/LogFileTest.java : Unit test for backend infrastructure
  javascript/LogFileResourceTest.js              : Javascript functional test to test REST-API.
  
- Documentation
+## Documentation
  The documentation files are in docs directory.
  - docs/apidocs               : Java docs
  - docs/class_diagrams        : POJOS, backend, resource
  - rest-api_spec/logfile.yaml : REST-API definition with swagger 2.0
  
- Dependencies:
+## Dependencies:
  - DropWizard core: Library that contains JETTY http server, full-featured jersey RESTful web framework, Jackson JSON library.
  - DropWizard client: jersey-client
  - JUnit for testing
@@ -121,7 +119,7 @@ For both entries, the REST-API respond with a JSON which represent a host with f
  - Chai for javascript assert
  - jasmine testing framework for javascript.
   
- Optimizations:
+## Optimizations:
   - Each REST-API request is done in parallel using threads for request the resource on each host for a particular file and for all the files.
   - In the backend there is a cached that is only use for files read in descendant order and always start from the end.
   
