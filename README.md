@@ -18,7 +18,7 @@ For http://domain/logfiles/api/v1/files/{filename} it supports one more query pa
 The parameters can be used alternative, all of them or some of them.
 
 For both entries, the REST-API respond with a JSON which represent a host with following information:
-<details>
+
 <p>
 ```json
  Host
@@ -43,6 +43,7 @@ For both entries, the REST-API respond with a JSON which represent a host with f
  	lines: List<String>                 /* Lines read from the file */ 
  }
  ```
+ </p>
  
  This are the expected errors:
  200 - OK
@@ -51,7 +52,7 @@ For both entries, the REST-API respond with a JSON which represent a host with f
  500 - Internal Server Error
  504 - Gateway Timeout
  
- </details>
+
  
  Some examples:
  1. http://domain/logfiles/api/v1/files/{filename}
