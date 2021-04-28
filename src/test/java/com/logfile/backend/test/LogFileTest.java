@@ -15,7 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import com.logfiles.api.LogFileBuffer;
+import com.logfiles.api.LogFile;
 import com.logfiles.backend.FilterKeyword;
 import com.logfiles.backend.LogFileReader;
 import com.logfiles.backend.ReadOrder;
@@ -24,8 +24,9 @@ import junitx.framework.FileAssert;
 
 public class LogFileTest {
 
-	private static LogFileReader 	logFile;	
+	private static LogFileReader 	logFileReader;	
 	
+	private static File             testLogFile;
 	/* Generated log file test */
 	@TempDir
 	File                    genPath;	
@@ -41,7 +42,7 @@ public class LogFileTest {
 				      .getResource("config.properties").getFile();
 		String pathTestF;
 		String testFName;
-		File   testLogFile;
+		
 		
 		try (InputStream input = new FileInputStream(pathProps))
 		{
@@ -55,7 +56,7 @@ public class LogFileTest {
 					    .getResource(testFName).getFile();
 			testLogFile = new File(pathTestF);
 			/* Instance of LogFile to be tested */
-			logFile     = new LogFileReader(testLogFile);
+			logFileReader     = new LogFileReader();
 		} catch (IOException ioe)
 		{
 			ioe.printStackTrace();		
@@ -90,7 +91,7 @@ public class LogFileTest {
 	@DisplayName("Testing log file in descendant way ...")
 	public void descTest()
 	{		
-		LogFileBuffer   logFileBuf;
+		LogFile         logFile;
 		List<String>    lines;
 		long            lastPos;		
 		String          masterLogF   = props.getProperty("logfiletest_masterdesc");
@@ -103,19 +104,19 @@ public class LogFileTest {
 			BufferedWriter bufWrf = new BufferedWriter(generatedFile))
 		{
 			/* Read complete log file in descendant way */
-			logFileBuf = logFile.readLines(ReadOrder.DESC, keywordFilter);
-			lines      = logFileBuf.getLines();
+			logFile = logFileReader.readLines(testLogFile, ReadOrder.DESC, keywordFilter);
+			lines      = logFile.getFileBuffered().getLines();
 			writeToFile(bufWrf, lines);
 						
 			/* Read last 5 lines of log file */
-			logFileBuf = logFile.readLines(5, ReadOrder.DESC, keywordFilter);
-			lines      = logFileBuf.getLines();
+			logFile = logFileReader.readLines(testLogFile, 5, ReadOrder.DESC, keywordFilter);
+			lines      = logFile.getFileBuffered().getLines();
 			writeToFile(bufWrf, lines);
 			
 			/* From last execution, get 3 more lines in descendant way */
-			lastPos = logFile.getLastPos();			
-			logFileBuf = logFile.readLines(lastPos, 3, ReadOrder.DESC, keywordFilter);
-			lines      = logFileBuf.getLines();
+			lastPos = logFileReader.getLastPos();			
+			logFile = logFileReader.readLines(testLogFile, lastPos, 3, ReadOrder.DESC, keywordFilter);
+			lines      = logFile.getFileBuffered().getLines();
 			writeToFile(bufWrf, lines);							
 		} 
 		catch (IOException ioe)
@@ -131,7 +132,7 @@ public class LogFileTest {
 	@DisplayName("Testing log file in ascendant way ...")
 	public void ascTest()
 	{		
-		LogFileBuffer   logFileBuf;
+		LogFile         logFile;
 		List<String>    lines;
 		long            lastPos;
 		String          masterLogF   = props.getProperty("logfiletest_masterasc");
@@ -144,19 +145,19 @@ public class LogFileTest {
 			BufferedWriter bufWrf = new BufferedWriter(generatedFile))
 		{
 			/* Read complete log file in ascendant way */
-			logFileBuf = logFile.readLines(ReadOrder.ASC, keywordFilter);
-			lines      = logFileBuf.getLines();
+			logFile = logFileReader.readLines(testLogFile, ReadOrder.ASC, keywordFilter);
+			lines      = logFile.getFileBuffered().getLines();
 			writeToFile(bufWrf, lines);
 			
 			/* Read first 5 lines of log file */
-			logFileBuf = logFile.readLines(5, ReadOrder.ASC, keywordFilter);
-			lines      = logFileBuf.getLines();
+			logFile = logFileReader.readLines(testLogFile, 5, ReadOrder.ASC, keywordFilter);
+			lines      = logFile.getFileBuffered().getLines();
 			writeToFile(bufWrf, lines);
 			
 			/* From last execution, read 3 more lines in ascendant way */
-			lastPos = logFile.getLastPos();			
-			logFileBuf = logFile.readLines(lastPos, 3, ReadOrder.ASC, keywordFilter);
-			lines      = logFileBuf.getLines();
+			lastPos = logFileReader.getLastPos();			
+			logFile = logFileReader.readLines(testLogFile, lastPos, 3, ReadOrder.ASC, keywordFilter);
+			lines      = logFile.getFileBuffered().getLines();
 			writeToFile(bufWrf, lines);							
 		} 
 		catch (IOException ioe)
@@ -171,7 +172,7 @@ public class LogFileTest {
 	@DisplayName("Testing log file in descendant and ascendant way ...")
 	public void ascDescTest()
 	{		
-		LogFileBuffer   logFileBuf;
+		LogFile         logFile;
 		List<String>    lines;
 		long            lastPos;
 		String          masterLogF   = props.getProperty("logfiletest_masterascdesc");
@@ -184,30 +185,30 @@ public class LogFileTest {
 			BufferedWriter bufWrf = new BufferedWriter(generatedFile))
 		{
 			/* Read complete log file in descendant way */
-			logFileBuf = logFile.readLines(ReadOrder.DESC, keywordFilter);
-			lines      = logFileBuf.getLines();
+			logFile = logFileReader.readLines(testLogFile, ReadOrder.DESC, keywordFilter);
+			lines      = logFile.getFileBuffered().getLines();
 			writeToFile(bufWrf, lines);
 			
 			/* Read complete log file in ascendant way */
-			logFileBuf = logFile.readLines(ReadOrder.ASC, keywordFilter);
-			lines      = logFileBuf.getLines();
+			logFile = logFileReader.readLines(testLogFile, ReadOrder.ASC, keywordFilter);
+			lines      = logFile.getFileBuffered().getLines();
 			writeToFile(bufWrf, lines);
 			
 			/* Read last 5 lines of log file */
-			logFileBuf = logFile.readLines(5, ReadOrder.DESC, keywordFilter);
-			lines      = logFileBuf.getLines();
+			logFile = logFileReader.readLines(testLogFile, 5, ReadOrder.DESC, keywordFilter);
+			lines      = logFile.getFileBuffered().getLines();
 			writeToFile(bufWrf, lines);
 			
 			/* After last execution, read after 3 lines in ascendant way */
-			lastPos = logFile.getLastPos();			
-			logFileBuf = logFile.readLines(lastPos, 3, ReadOrder.ASC, keywordFilter);
-			lines      = logFileBuf.getLines();
+			lastPos = logFileReader.getLastPos();			
+			logFile = logFileReader.readLines(testLogFile, lastPos, 3, ReadOrder.ASC, keywordFilter);
+			lines      = logFile.getFileBuffered().getLines();
 			writeToFile(bufWrf, lines);		
 			
 			/* After last execution, read before 2 lines in descendant way */
-			lastPos = logFile.getLastPos();
-			logFileBuf = logFile.readLines(lastPos, 2, ReadOrder.DESC, keywordFilter);
-			lines      = logFileBuf.getLines();
+			lastPos = logFileReader.getLastPos();
+			logFile = logFileReader.readLines(testLogFile, lastPos, 2, ReadOrder.DESC, keywordFilter);
+			lines      = logFile.getFileBuffered().getLines();
 			writeToFile(bufWrf, lines);					
 		} 
 		catch (IOException ioe)

@@ -1,8 +1,11 @@
 package com.logfiles;
 
+import javax.ws.rs.client.Client;
+
 import com.logfiles.entrypoint.LogFileResource;
 
 import io.dropwizard.Application;
+import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.setup.Environment;
 
 /**
@@ -26,7 +29,10 @@ public class LogFilesApp extends Application<LogFilesConf> {
 	public void run(LogFilesConf conf, Environment env)
 			throws Exception {
 
-		final LogFileResource logFileRes = new LogFileResource(conf.getLogDirectory(),
+		final Client client = new JerseyClientBuilder(env).using(conf.getJerseyClient())
+				              .build(getName());
+		final LogFileResource logFileRes = new LogFileResource(client,
+															   conf.getLogDirectory(),
 															   Long.valueOf(conf.getStartPos()),
 															   Integer.valueOf(conf.getnEvents()), 
 				                                               Integer.valueOf(conf.getOrderBy()),

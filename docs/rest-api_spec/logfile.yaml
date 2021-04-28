@@ -43,7 +43,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/LogFile'
+              $ref: '#/definitions/Host'
         400:
           $ref: '#/responses/400'
         403:
@@ -106,7 +106,9 @@ paths:
         200:
           description: file found
           schema:
-            $ref: '#/definitions/LogFile'
+            type: array
+            items:
+              $ref: '#/definitions/Host'
         400:
           $ref: '#/responses/400'
         403:
@@ -118,6 +120,24 @@ paths:
     
           
 definitions:
+  Host:
+      type: object
+      required:
+        - host
+        - logfiles
+        - returned_code
+      properties:
+        host:
+          type: string
+          example: 10.1.2.3
+        logfiles:
+          type: array
+          items:
+            $ref: '#/definitions/LogFile'
+          
+        returned_code:
+          $ref: '#/definitions/ErrorType'
+          
   LogFile:
       type: object
       required:

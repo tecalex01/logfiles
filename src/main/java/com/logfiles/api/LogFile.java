@@ -10,9 +10,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class LogFile {
 
+	/** Host where log file is */
 	private String        host;
+	/** Path where file was found */
 	private String        path;
+	/** File size */
 	private Long       size;
+	/** Lines read */
 	private LogFileBuffer fileBuffered; 
 	
 	/**
