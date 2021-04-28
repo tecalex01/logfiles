@@ -27,8 +27,8 @@ public class LogFilesApp extends Application<LogFilesConf> {
 	 */
 	@Override
 	public void run(LogFilesConf conf, Environment env)
-			throws Exception {
-
+			throws Exception {		
+		
 		final Client client = new JerseyClientBuilder(env).using(conf.getJerseyClient())
 				              .build(getName());
 		final LogFileResource logFileRes = new LogFileResource(client,

@@ -46,7 +46,7 @@ import com.logfiles.backend.ReadOrder;
 @Path("logfiles/api/v1/files")
 @Produces(MediaType.APPLICATION_JSON)
 public class LogFileResource {
-	/** Default log directory */
+	/** Default log directory */	
 	private String   defaultDir;
 	/** File cursor position since the reading will start */
 	private Long     startPos;
