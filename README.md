@@ -18,6 +18,9 @@ For http://domain/logfiles/api/v1/files/{filename} it supports one more query pa
 The parameters can be used alternative, all of them or some of them.
 
 For both entries, the REST-API respond with a JSON which represent a host with following information:
+<details>
+<p>
+```json
  Host
  {
     host: string,                       /* Host name */
@@ -39,6 +42,7 @@ For both entries, the REST-API respond with a JSON which represent a host with f
  	lastPosRead: long,                  /* This helps to know which is the last byte read in the file */
  	lines: List<String>                 /* Lines read from the file */ 
  }
+ ```
  
  This are the expected errors:
  200 - OK
@@ -47,6 +51,7 @@ For both entries, the REST-API respond with a JSON which represent a host with f
  500 - Internal Server Error
  504 - Gateway Timeout
  
+ </details>
  
  Some examples:
  1. http://domain/logfiles/api/v1/files/{filename}
@@ -124,7 +129,7 @@ How to run code:
 - mvn test        : Run JUnit tests.
 - mvn jasmine:bdd : Run the javascript tests.
 - mvn javadoc:javadoc : Generates javadoc for the project. Which is already on docs directory.
-- mvn install: To create target/logfiles-0.0.1-SNAPSHOT.jar
+- mvn clean package: To create target/logfiles-0.0.1-SNAPSHOT.jar
 - Execute the app: java -jar target/logfiles-0.0.1-SNAPSHOT.jar
 
   
